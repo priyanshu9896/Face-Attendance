@@ -2,6 +2,7 @@
 
 const API_URL = 'http://localhost:5000/api';
 
+// Type definitions
 export type Student = {
   id: string;
   name: string;
@@ -45,16 +46,24 @@ export type AttendanceData = {
 // Function to register a new student
 export async function registerStudent(name: string, images: string[], rollNumber?: string): Promise<Student> {
   try {
+    const requestData = {
+      name,
+      roll_number: rollNumber,
+      images
+    };
+
+    console.log('Sending registration request with data:', {
+      name,
+      roll_number: rollNumber,
+      imageCount: images.length
+    });
+
     const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        name,
-        roll_number: rollNumber,
-        images
-      })
+      body: JSON.stringify(requestData)
     });
     
     if (!response.ok) {
@@ -64,15 +73,17 @@ export async function registerStudent(name: string, images: string[], rollNumber
     
     const data = await response.json();
     return data.student;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error registering student:', error);
-    throw error;
+    throw new Error(error.message || 'Failed to register student. Check the console for details.');
   }
 }
 
 // Function to recognize faces in an image
 export async function recognizeFaces(imageData: string) {
   try {
+    console.log('Sending image for recognition...');
+    
     const response = await fetch(`${API_URL}/recognize`, {
       method: 'POST',
       headers: {
@@ -88,10 +99,12 @@ export async function recognizeFaces(imageData: string) {
       throw new Error(errorData.error || 'Failed to recognize faces');
     }
     
-    return await response.json();
-  } catch (error) {
+    const data = await response.json();
+    console.log('Recognition response:', data);
+    return data;
+  } catch (error: any) {
     console.error('Error recognizing faces:', error);
-    throw error;
+    throw new Error(error.message || 'Recognition request failed');
   }
 }
 
@@ -105,10 +118,10 @@ export async function getStudents(): Promise<Student[]> {
     }
     
     const data = await response.json();
-    return data.students;
+    return data.students || [];
   } catch (error) {
     console.error('Error fetching students:', error);
-    throw error;
+    return [];
   }
 }
 
@@ -128,7 +141,8 @@ export async function getAttendance(date?: string): Promise<AttendanceData> {
     return await response.json();
   } catch (error) {
     console.error('Error fetching attendance:', error);
-    throw error;
+    // Return empty data structure to avoid errors
+    return { date: date || new Date().toISOString().split('T')[0], records: [] };
   }
 }
 
@@ -142,9 +156,9 @@ export async function getAttendanceDates(): Promise<string[]> {
     }
     
     const data = await response.json();
-    return data.dates;
+    return data.dates || [];
   } catch (error) {
     console.error('Error fetching attendance dates:', error);
-    throw error;
+    return [];
   }
 }
