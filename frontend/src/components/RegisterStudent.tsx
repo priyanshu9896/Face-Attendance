@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, UserPlus } from 'lucide-react';
 import Webcam from './Webcam';
 
 interface StudentRecord {
@@ -18,8 +17,7 @@ interface RegisterStudentProps {
 
 const RegisterStudent: React.FC<RegisterStudentProps> = ({ 
   isActive, 
-  onFaceDetected, 
-  onAttendanceMarked 
+  onFaceDetected
 }) => {
   const [name, setName] = useState<string>('');
   const [rollNo, setRollNo] = useState<string>('');

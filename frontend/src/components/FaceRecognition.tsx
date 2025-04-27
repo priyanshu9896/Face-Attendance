@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Camera, UserCheck } from 'lucide-react';
+import React, { useState } from 'react';
 import Webcam from './Webcam';
 
 interface StudentRecord {

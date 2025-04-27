@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, UserPlus, UserCheck, Download, Check } from 'lucide-react';
+import { Users, UserPlus, UserCheck, Check } from 'lucide-react';
 import FaceRecognition from './components/FaceRecognition';
 import RegisterStudent from './components/RegisterStudent';
 import AttendanceTable from './components/AttendanceTable';
